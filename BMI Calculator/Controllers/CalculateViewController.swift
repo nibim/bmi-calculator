@@ -8,9 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculateViewController: UIViewController {
 
-
+    var bmi: String = "0.0"
     @IBOutlet weak var heightLable: UILabel!
     @IBOutlet weak var weightLable: UILabel!
     
@@ -32,11 +32,19 @@ class ViewController: UIViewController {
     @IBAction func calculatedPressed(_ sender: UIButton) {
         let height =  heightSlider.value
         let weight =  weightSlider.value
-        let bmi = weight / (height * height)
-        let secondVC = secondViewController()  //make an object from the secondView
-        secondVC.bmiValue = String(format:"%.1f", bmi)
-        self.present(secondVC, animated: true, completion: nil)     //secondView is represented
+        let bmiValue = weight / (height * height)
+        bmi = String(format:"%.1f", bmiValue)
         
+        self.performSegue(withIdentifier: "goToResult", sender: self)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResult" {
+            let destinitonViewController = segue.destination as! ResultViewController   // you need to narrow down your vc to ResultVC which is the exact data type
+            destinitonViewController.bmiValue = bmi
+            
+        }
     }
 }
 
