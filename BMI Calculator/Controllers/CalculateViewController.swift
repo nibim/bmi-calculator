@@ -10,7 +10,7 @@ import UIKit
 
 class CalculateViewController: UIViewController {
 
-    var bmi: String = "0.0"
+    var calculatedBrain = CalculatorBrain()
     @IBOutlet weak var heightLable: UILabel!
     @IBOutlet weak var weightLable: UILabel!
     
@@ -32,17 +32,18 @@ class CalculateViewController: UIViewController {
     @IBAction func calculatedPressed(_ sender: UIButton) {
         let height =  heightSlider.value
         let weight =  weightSlider.value
-        let bmiValue = weight / (height * height)
-        bmi = String(format:"%.1f", bmiValue)
         
-        self.performSegue(withIdentifier: "goToResult", sender: self)
+        calculatedBrain.calculateBMI(height: height, weight: weight)
+        performSegue(withIdentifier: "goToResult", sender: self)
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToResult" {
             let destinitonViewController = segue.destination as! ResultViewController   // you need to narrow down your vc to ResultVC which is the exact data type
-            destinitonViewController.bmiValue = bmi
+            destinitonViewController.bmiValue = calculatedBrain.getBMIValue()
+            destinitonViewController.advice = calculatedBrain.getAdvice()
+            destinitonViewController.color = calculatedBrain.getColor()
             
         }
     }
